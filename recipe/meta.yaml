@@ -1,31 +1,37 @@
-{% set version = "1.10.0" %}
+{% set name = "requests-mock" %}
+{% set version = "1.11.0" %}
 
 package:
-  name: requests-mock
+  name: {{ name }}
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/r/requests-mock/requests-mock-{{ version }}.tar.gz
-  sha256: 59c9c32419a9fb1ae83ec242d98e889c45bd7d7a65d48375cc243ec08441658b
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: ef10b572b489a5f28e09b708697208c4a3b2b89ef80a9f01584340ea357ec3c4
 
 build:
   number: 0
-  script: python -m pip install . --no-deps --ignore-installed
-  noarch: python
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
+    - python
     - pbr
     - pip
-    - python 2.7|>=3.4
+    - setuptools
+    - wheel
   run:
-    - python 2.7|>=3.4
-    - requests >=2.3
+    - python
+    - requests >=2.3,<3
     - six
 
 test:
   imports:
     - requests_mock
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: https://github.com/jamielennox/requests-mock
@@ -34,7 +40,8 @@ about:
   license_file: LICENSE
   summary: requests-mock provides a building block to stub out the HTTP requests portions of your testing code.
   description: requests-mock provides a building block to stub out the HTTP requests portions of your testing code.
-  doc_url: https://requests-mock.readthedocs.io/en/latest/
+  doc_url: https://requests-mock.readthedocs.io
+  dev_url: https://github.com/jamielennox/requests-mock
 
 extra:
   recipe-maintainers:
